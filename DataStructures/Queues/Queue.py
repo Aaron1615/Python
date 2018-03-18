@@ -3,7 +3,7 @@ class Queue:
      def __init__(self):
         """Initializes an empty queue object."""
         self.items = []
-     def isEmpty():
+     def isEmpty(self):
         """Returns a boolean value depending on whether the Queue has items(False)
         or does not(True)."""
         return self.items == []
