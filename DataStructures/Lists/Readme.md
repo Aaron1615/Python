@@ -1,3 +1,3 @@
 # Lists
 
-This File will contain List data tructure implementations as well as the Node data Structure.
+This File will contain List data structure implementations as well as the Node data Structure.
