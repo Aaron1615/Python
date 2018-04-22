@@ -1,1 +1,1 @@
-# This folder will contain all projects doen with the pygame library
+# This folder will contain all projects done with the pygame library
