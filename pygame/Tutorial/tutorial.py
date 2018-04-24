@@ -1,5 +1,6 @@
 import pygame as pygame
 import time
+import random
 
 pygame.init()
 
@@ -18,7 +19,15 @@ pygame.display.set_caption('A bit Pug-ey')
 clock = pygame.time.Clock()
 
 pug_img = pygame.image.load("pug.jpeg")
+nightmare_img_left = pygame.image.load("nightmare.png")
+nightmare_img_right = pygame.image.load("nightmare2.png")
 
+
+def things(thing_x,thing_y,thing_w,thing_h, color):
+    if thing_x > display_width//2 - 150:
+        gameDisplay.blit(nightmare_img_left,(thing_x,thing_y))
+    else:
+        gameDisplay.blit(nightmare_img_right,(thing_x,thing_y))
 def pug(x,y):
     gameDisplay.blit(pug_img,(x,y))
 
@@ -48,6 +57,11 @@ def game_loop():
     y = (display_height * 0.8)
 
     x_change = 0
+    thing_start_x = random.randrange(0,display_width)
+    thing_start_y = -1000
+    thing_speed = 7
+    thing_width = 300
+    thing_height = 300
 
     game_exit = False
 
@@ -71,10 +85,16 @@ def game_loop():
         x += x_change
     
         gameDisplay.fill(white)
+        things(thing_start_x,thing_start_y,thing_width,thing_height,black)
+        thing_start_y += thing_speed
         pug(x,y)
 
         if x > display_width - pug_width or x < -20:
             crash()
+        
+        if thing_start_y > display_height:
+            thing_start_y = 0- thing_height
+            thing_start_x = random.randrange(0,display_width)
 
 
         pygame.display.update()
