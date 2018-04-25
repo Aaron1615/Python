@@ -1,4 +1,4 @@
-import pygame as pygame
+import pygame
 import time
 import random
 
@@ -15,7 +15,7 @@ red = (255,0,0)
 pug_width = 125
 
 gameDisplay = pygame.display.set_mode((display_width,display_height))
-pygame.display.set_caption('A bit Pug-ey')
+pygame.display.set_caption('Dreaming Pug')
 clock = pygame.time.Clock()
 
 pug_img = pygame.image.load("pug.jpeg")
@@ -23,16 +23,17 @@ nightmare_img_left = pygame.image.load("nightmare.png")
 nightmare_img_right = pygame.image.load("nightmare2.png")
 
 
-def things(thing_x,thing_y,thing_w,thing_h, color):
-    if thing_x > display_width//2 - 150:
-        gameDisplay.blit(nightmare_img_left,(thing_x,thing_y))
+def nightmares(nightmare_x,nightmare_y,nightmare_w,nightmare_h, color):
+    if nightmare_x > display_width//2 - 150:
+        gameDisplay.blit(nightmare_img_left,(nightmare_x,nightmare_y))
     else:
-        gameDisplay.blit(nightmare_img_right,(thing_x,thing_y))
+        gameDisplay.blit(nightmare_img_right,(nightmare_x,nightmare_y))
+
 def pug(x,y):
     gameDisplay.blit(pug_img,(x,y))
 
 def text_objects(text, font):
-    text_surface = font.render(text, True, black)
+    text_surface = font.render(text, True, red)
     return text_surface, text_surface.get_rect()
 
 def message_display(text):
@@ -51,17 +52,22 @@ def crash():
     message_display("You woke the Pug!")
     game_loop()
 
+def crash_nightmare():
+    message_display("A Nightmare!")
+    game_loop()
+
+
 def game_loop():
 
     x = (display_width * 0.40)
     y = (display_height * 0.8)
 
     x_change = 0
-    thing_start_x = random.randrange(0,display_width)
-    thing_start_y = -1000
-    thing_speed = 7
-    thing_width = 300
-    thing_height = 300
+    nightmare_start_x = random.randrange(0,display_width)
+    nightmare_start_y = -1000
+    nightmare_speed = 7
+    nightmare_width = 300
+    nightmare_height = 300
 
     game_exit = False
 
@@ -85,18 +91,28 @@ def game_loop():
         x += x_change
     
         gameDisplay.fill(white)
-        things(thing_start_x,thing_start_y,thing_width,thing_height,black)
-        thing_start_y += thing_speed
+        nightmares(nightmare_start_x,nightmare_start_y,nightmare_width,nightmare_height,black)
+        nightmare_start_y += nightmare_speed
         pug(x,y)
 
         if x > display_width - pug_width or x < -20:
             crash()
         
-        if thing_start_y > display_height:
-            thing_start_y = 0- thing_height
-            thing_start_x = random.randrange(0,display_width)
+        if nightmare_start_y > display_height:
+            nightmare_start_y = 0- nightmare_height
+            nightmare_start_x = random.randrange(0,display_width)
 
+        if y < nightmare_start_y+nightmare_height:
+            print("y crossover")
 
+            if x > nightmare_start_x and x < nightmare_start_x + nightmare_width:
+                print("x crossover")
+                crash_nightmare()
+            elif x + pug_width > nightmare_start_x and x + pug_width < nightmare_start_x + nightmare_width:
+                print(x + pug_width)
+                print(nightmare_start_x + nightmare_width)
+                crash_nightmare()
+                
         pygame.display.update()
         clock.tick(60)
 
