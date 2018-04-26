@@ -12,7 +12,7 @@ black = (0,0,0)
 white = (255,255,255)
 red = (255,0,0)
 
-pug_width = 125
+pug_width = 150
 
 gameDisplay = pygame.display.set_mode((display_width,display_height))
 pygame.display.set_caption('Dreaming Pug')
@@ -22,6 +22,10 @@ pug_img = pygame.image.load("pug.jpeg")
 nightmare_img_left = pygame.image.load("nightmare.png")
 nightmare_img_right = pygame.image.load("nightmare2.png")
 
+def nightmares_dodged(count):
+    font = pygame.font.SysFont(None,25)
+    text = font.render("Dodged: " + str(count), True, red)
+    gameDisplay.blit(text,(0,0))
 
 def nightmares(nightmare_x,nightmare_y,nightmare_w,nightmare_h, color):
     if nightmare_x > display_width//2 - 150:
@@ -69,6 +73,8 @@ def game_loop():
     nightmare_width = 300
     nightmare_height = 300
 
+    dodged = 0
+
     game_exit = False
 
     while not game_exit:
@@ -94,19 +100,24 @@ def game_loop():
         nightmares(nightmare_start_x,nightmare_start_y,nightmare_width,nightmare_height,black)
         nightmare_start_y += nightmare_speed
         pug(x,y)
+        nightmares_dodged(dodged)
 
         if x > display_width - pug_width or x < -20:
             crash()
         
         if nightmare_start_y > display_height:
-            nightmare_start_y = 0- nightmare_height
+            nightmare_start_y = 0 - nightmare_height
             nightmare_start_x = random.randrange(0,display_width)
+            dodged +=1
+            nightmare_speed += .2
 
         if y < nightmare_start_y+nightmare_height:
             print("y crossover")
 
             if x > nightmare_start_x and x < nightmare_start_x + nightmare_width:
-                print("x crossover")
+                print(x)
+                print(nightmare_start_x)
+                print(nightmare_start_x + nightmare_width)
                 crash_nightmare()
             elif x + pug_width > nightmare_start_x and x + pug_width < nightmare_start_x + nightmare_width:
                 print(x + pug_width)
