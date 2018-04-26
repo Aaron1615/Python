@@ -11,6 +11,8 @@ class Vertex:
         self.dist = sys.maxsize
         self.color = "white"
         self.pred = None
+        self.disc =0
+        self.fin = 0
 
     
     def add_neighbor(self,neighbor,weight=0):
@@ -32,6 +34,22 @@ class Vertex:
     def set_pred(self,p):
         """sets the predecesor of the vertex"""
         self.pred = p
+
+    def set_discovery(self,dtime):
+        """sets discovery time"""
+        self.disc = dtime
+
+    def get_discovery(self):
+        """returns the discovery time"""
+        return self.disc
+    
+    def set_finish(self,ftime):
+        """sets the finish time"""
+        self.fin = ftime
+    
+    def get_finish(self):
+        """returns the finish time"""
+        return self.fin
 
     def get_pred(self):
         """returns the predecesor of the vertex"""
