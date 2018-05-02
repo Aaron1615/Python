@@ -10,9 +10,13 @@ display_height = 600
 
 black = (0,0,0)
 white = (255,255,255)
-red = (255,0,0)
+red = (200,0,0)
+green = (0,200,0)
 
-pug_width = 150
+bright_green = (102,255,0)
+bright_red = (255,0,0)
+
+pug_width = 120
 
 gameDisplay = pygame.display.set_mode((display_width,display_height))
 pygame.display.set_caption('Dreaming Pug')
@@ -40,6 +44,10 @@ def text_objects(text, font):
     text_surface = font.render(text, True, red)
     return text_surface, text_surface.get_rect()
 
+def text_object_white(text, font):
+    text_surface = font.render(text, True, white)
+    return text_surface, text_surface.get_rect()
+
 def message_display(text):
     large_text = pygame.font.Font("freesansbold.ttf",80)
     text_surf, text_rect = text_objects(text, large_text)
@@ -56,6 +64,46 @@ def crash():
     message_display("You woke the Pug!")
     game_loop()
 
+
+def button(msg,x,y,w,h,ic,ac,action=None):
+    mouse = pygame.mouse.get_pos()
+    click = pygame.mouse.get_pressed()
+
+    if x + w > mouse[0] > x and y+h > mouse[1] > y:
+        pygame.draw.rect(gameDisplay,ac,(x,y,w,h))
+
+        if click[0] == 1 and action != None:
+            action()
+    else:
+        pygame.draw.rect(gameDisplay, ic, (x,y,w,h))
+
+    small_text = pygame.font.Font("freesansbold.ttf",20)
+    text_surf, text_rect = text_object_white(msg, small_text)
+    text_rect.center =((x+(w/2)),(y+(h/2)))
+    gameDisplay.blit(text_surf,text_rect)
+    
+
+def game_intro():
+    intro = True
+
+    while intro:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+
+        gameDisplay.fill(white)
+        large_text = pygame.font.Font("freesansbold.ttf",115)
+        text_surf, text_rect = text_objects("Dreaming Pug", large_text)
+        text_rect.center =((display_width/2),(display_height/2))
+        gameDisplay.blit(text_surf, text_rect)
+
+        button("Go!",150,450,100,50,green,bright_green,game_loop)
+        button("Quit",550,450,100,50,red,bright_red,quit)
+
+        pygame.display.update()
+        clock.tick(15)
+
 def crash_nightmare():
     message_display("A Nightmare!")
     game_loop()
@@ -70,8 +118,8 @@ def game_loop():
     nightmare_start_x = random.randrange(0,display_width)
     nightmare_start_y = -1000
     nightmare_speed = 7
-    nightmare_width = 300
-    nightmare_height = 300
+    nightmare_width = 260
+    nightmare_height = 280
 
     dodged = 0
 
@@ -97,9 +145,10 @@ def game_loop():
         x += x_change
     
         gameDisplay.fill(white)
+        pug(x,y)
         nightmares(nightmare_start_x,nightmare_start_y,nightmare_width,nightmare_height,black)
         nightmare_start_y += nightmare_speed
-        pug(x,y)
+        
         nightmares_dodged(dodged)
 
         if x > display_width - pug_width or x < -20:
@@ -127,6 +176,6 @@ def game_loop():
         pygame.display.update()
         clock.tick(60)
 
-game_loop()
+game_intro()
 pygame.quit()
 quit()
